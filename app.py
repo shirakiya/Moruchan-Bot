@@ -68,9 +68,9 @@ def callback():
                               headers=headers,
                               proxies=proxies,
                               json=payload)
-            print(str(r))
+            print('REQUEST RESULT:' + str(r))
         except Exception as e:
-            print(e)
+            print('ERROR: '+ str(e))
 
     return jsonify('OK')
 
