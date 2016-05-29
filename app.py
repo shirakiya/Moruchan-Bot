@@ -3,6 +3,7 @@
 import os
 from flask import Flask
 from flask import request
+from flask import abort
 from flask import jsonify
 import requests
 
@@ -25,9 +26,11 @@ EVENTTYPE_OPERATION = '138311609100106403'
 
 @app.route('/callback', methods=['POST'])
 def callback():
+    if not request.get_json():
+        abort(400)
+
     receive_body = request.get_json(cache=False)
-    print(str(receive_body))
-    app.logger.info(receive_body)
+    print(str(receive_body))  # for Debug
 
     endpoint_url = 'https://trialbot-api.line.me/v1/events'
     # Custom Header for LINE Bot API
@@ -49,9 +52,10 @@ def callback():
     for receive in receive_body['result']:
         # Operationに関する処理は一旦無反応で
         if receive['eventType'] == EVENTTYPE_OPERATION:
-            app.logger.info('RECEIVE OPERATION: ' + str(receive))
+            print('RECEIVE OPERATION: ' + str(receive))
             continue
 
+        print(receive)
         payload['to'] = receive['content']['from']
         payload['content'] = {
             'contentType': 1,
@@ -59,11 +63,14 @@ def callback():
             'text': 'みゅ？'
         }
 
-        r = requests.post(endpoint_url,
-                          headers=headers,
-                          proxies=proxies,
-                          json=payload)
-        app.logger.info(r)
+        try:
+            r = requests.post(endpoint_url,
+                              headers=headers,
+                              proxies=proxies,
+                              json=payload)
+            print(str(r))
+        except Exception as e:
+            print(e)
 
     return jsonify('OK')
 
