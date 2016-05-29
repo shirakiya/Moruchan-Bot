@@ -26,6 +26,7 @@ EVENTTYPE_OPERATION = '138311609100106403'
 @app.route('/callback', methods=['POST'])
 def callback():
     receive_body = request.get_json(cache=False)
+    print(str(receive_body))
     app.logger.info(receive_body)
 
     endpoint_url = 'https://trialbot-api.line.me/v1/events'
