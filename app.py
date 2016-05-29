@@ -43,7 +43,7 @@ def callback():
     # 固定IPからAPI callする必要があり, Heroku Fixie利用のため
     proxies = {'https': FIXIE_URL}
     payload = {
-        'to': None,
+        'to': [],
         'toChannel': TOCHANNEL,
         'eventType': EVENTTYPE_SENDING,
         'content': None,
@@ -56,7 +56,7 @@ def callback():
             continue
 
         print(receive)
-        payload['to'] = receive['content']['from']
+        payload['to'].append(receive['content']['from'])
         payload['content'] = {
             'contentType': 1,
             'toType': 1,
