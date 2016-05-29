@@ -4,7 +4,6 @@ import os
 from flask import Flask
 from flask import request
 from flask import abort
-from flask import jsonify
 import requests
 
 app = Flask(__name__)
@@ -55,7 +54,6 @@ def callback():
             print('RECEIVE OPERATION: ' + str(receive))
             continue
 
-        print(receive)
         payload['to'].append(receive['content']['from'])
         payload['content'] = {
             'contentType': 1,
@@ -71,8 +69,7 @@ def callback():
             print('REQUEST RESULT:' + str(r))
         except Exception as e:
             print('ERROR: '+ str(e))
-
-    return jsonify('OK')
+    return
 
 
 if __name__ == '__main__':
